@@ -1,12 +1,13 @@
-import { React, useEffect, useState } from "react";
-import * as services from "../../services/dropdown";
 import axios from "axios";
 import moment from "moment";
+import { React, useEffect, useState } from "react";
+import "../UserForm/detailsForm.css"
+import * as services from "../../services/dropdown";
 
 function DetailsForm(props) {
   const [data_x, setData_x] = useState([]);
 
-  let [name, setname] = useState("");
+  const [name, setname] = useState("");
   let [date, setdate] = useState("");
   let [address, setaddress] = useState("");
   let [gender, setgender] = useState("");
@@ -19,19 +20,20 @@ function DetailsForm(props) {
   const [extra, setExtra] = useState("");
   const [success_msg, setSuccessMsg] = useState("");
 
-  let all_colleges = [];
-  let options = null;
-  let country_options = [];
+  let getColleges = [];
+  let option = null;
+  let country_option = [];
   let country_list = null;
+  // ==== get cuntries === //
   const listCountry = () => {
     axios
       .get("https://restcountries.com/v3.1/all")
       .then((response) => {
         let result = response.data;
         result.map((res) => {
-          country_options.push(res.name.common);
+          country_option.push(res.name.common);
         });
-        setData_x(country_options);
+        setData_x(country_option);
       })
       .catch((e) => {
         console.log(e);
@@ -47,15 +49,17 @@ function DetailsForm(props) {
   }
 
   useEffect(() => listCountry(), []);
+
+  // For retrieving colleges based on country selected
   const changeSelectOptionHandler = (event) => {
     services
       .getCollegesDropdown(event.target.value, "")
       .then((response) => {
         let res = response.data;
         res.map((result) => {
-          all_colleges.push(result.name);
+          getColleges.push(result.name);
         });
-        setSelected(all_colleges);
+        setSelected(getColleges);
       })
       .catch((e) => {
         console.log(e);
@@ -63,23 +67,25 @@ function DetailsForm(props) {
   };
 
   if (selected) {
-    options = selected.map((el, index) => (
+    option = selected.map((el, index) => (
       <option key={index} value={el}>
         {el}
       </option>
     ));
   }
 
-  const handleHobbies = (e) => {
-    const { value, checked } = e.target;
+  const handlehobbies = (event) => {
+    const { value, checked } = event.target;
     if (checked) {
       setHobbies([...hobbies, value]);
     } else {
       setHobbies(hobbies.filter((hobbie) => hobbie !== value));
     }
   };
-  const handleInput = (e) => {
-    const { value } = e.target;
+
+  // For handling input from "others" checkbox
+  const handleInput = (event) => {
+    const { value } = event.target;
     setExtra(value);
     setHobbies([...hobbies, extra]);
   };
@@ -102,15 +108,13 @@ function DetailsForm(props) {
     if (data) {
       data.push(ele);
       localStorage.setItem("data", JSON.stringify(data));
-      console.log("storing in local")
-      console.log(data)
     } else {
       localStorage.setItem("data", JSON.stringify([ele]));
     }
     setTimeout(function () {
-      alert("Successfull")
+      alert("Successfully Register")
     });
-   };
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -131,7 +135,7 @@ function DetailsForm(props) {
   return (
     <div className="form-body">
       <div className="row">
-        <div className="form-holder">
+        <div className="form_or">
           <div className="form-content">
             <div className="form-items">
               {!!success_msg ? (
@@ -141,8 +145,8 @@ function DetailsForm(props) {
               ) : (
                 ""
               )}
-              <h3>User Form</h3>
-              <p>Fill All Fields Below</p>
+              <h3 id="reg">Registration</h3>
+              <p id="reg">Fill All Fields Below</p>
 
               <form className="registration-form" onSubmit={handleSubmit}>
                 <div className="col-12">
@@ -163,12 +167,13 @@ function DetailsForm(props) {
                     <input
                       type="date"
                       className="form-control mt-3"
-                      style={{ color: "#000" }}
-                      value={date}
                       name="date"
+                      style={{ color: "#000", fontWeight: "bold" }}
+                      value={date}
+                      onChange={(e) => setdate(e.target.value)}
+                      autoComplete="off"
                       max={moment().format("YYYY-MM-DD")}
                       required
-                      onChange={(e) => setdate(e.target.value)}
                     />
                   </div>
                 </div>
@@ -189,7 +194,7 @@ function DetailsForm(props) {
                 <div className="col-12">
                   <select
                     className="form-select mt-3"
-                    style={{ color: "#000" }}
+                    style={{ color: "#000", fontWeight: "normal" }}
                     onChange={(e) => setgender(e.target.value)}
                     required
                   >
@@ -198,7 +203,7 @@ function DetailsForm(props) {
                     </option>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Other">Other</option>
+                    <option value="Other">Not To Say</option>
                   </select>
                 </div>
 
@@ -216,27 +221,25 @@ function DetailsForm(props) {
                     <option selected disabled value={""}>
                       --Select University--
                     </option>
-                    {options}
+                    {option}
                   </select>
                 </div>
-
                 <div className="col-12">
                   <h6 className="text-white mt-3">Hobbies</h6>
                   <div className="checkbox-group" required>
-
-                    <div className="form-check form-check-inline">
+                <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
                         type="checkbox"
                         name="hobbies"
                         id="inlineCheckbox1"
                         value="Gaming"
-                        onChange={handleHobbies}
+                        onChange={handlehobbies}
                       />
                       <label className="form-check-label" for="inlineCheckbox1">
                         Gaming
                       </label>
-                    </div>
+                </div>
                     <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
@@ -244,12 +247,15 @@ function DetailsForm(props) {
                         name="hobbies"
                         id="inlineCheckbox1"
                         value="Reading"
-                        onChange={handleHobbies}
+                        onChange={handlehobbies}
                       />
                       <label className="form-check-label" for="inlineCheckbox1">
                         Reading
                       </label>
                     </div>
+
+                    
+
                     <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
@@ -257,7 +263,7 @@ function DetailsForm(props) {
                         name="hobbies"
                         id="inlineCheckbox1"
                         value="Travelling"
-                        onChange={handleHobbies}
+                        onChange={handlehobbies}
                       />
                       <label className="form-check-label" for="inlineCheckbox1">
                         Travelling
@@ -269,13 +275,14 @@ function DetailsForm(props) {
                         type="checkbox"
                         name="hobbies"
                         id="inlineCheckbox1"
-                        value="Chess"
-                        onChange={handleHobbies}
+                        value="Gardening"
+                        onChange={handlehobbies}
                       />
                       <label className="form-check-label" for="inlineCheckbox1">
-                        Chess
+                        Gardening
                       </label>
                     </div>
+
                     <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
@@ -283,7 +290,7 @@ function DetailsForm(props) {
                         name="hobbies"
                         id="inlineCheckbox1"
                         value="Cycling"
-                        onChange={handleHobbies}
+                        onChange={handlehobbies}
                       />
                       <label className="form-check-label" for="inlineCheckbox1">
                         Cycling
@@ -304,6 +311,15 @@ function DetailsForm(props) {
                         Other
                       </label>
 
+                      { <input
+                        className="inputRequest formContentElement"
+                        id="other_text"
+                        name="token"
+                        type="text"
+                        onChange={handlehobbies}
+                        style={{ display: "none" }}
+                      /> }
+
                       {checked ? (
                         <input
                           className="inputRequest formContentElement"
@@ -323,7 +339,7 @@ function DetailsForm(props) {
                     <textarea
                       className="form-control mt-3"
                       rows="2"
-                      placeholder="Write a short bio"
+                      placeholder="Enter Short Bio Here"
                       name="short_bio"
                       value={shortbio}
                       onChange={(e) => setshortbio(e.target.value)}
@@ -338,7 +354,7 @@ function DetailsForm(props) {
                     <textarea
                       className="form-control mt-3"
                       rows="3"
-                      placeholder="Write a long bio"
+                      placeholder="Enter Long Bio Here"
                       name="long_bio"
                       value={longbio}
                       onChange={(e) => setlongbio(e.target.value)}

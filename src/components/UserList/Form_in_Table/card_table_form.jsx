@@ -2,33 +2,34 @@ import { React, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Modal from "react-bootstrap/Modal";
 
-function CardTabelForm(props) {
+
+function CardsInTable(props) {
   let userList = JSON.parse(localStorage.getItem("data") || "[]");
   userList.sort(function (x, y) {
     return x == y ? 0 : x > y ? 1 : -1;
   });
-
-  const navigate = useNavigate();
-  const [toggle, setToggle] = useState(false);
-  const [modalInfo, setModalInfo] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [show, setShow] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-
-  const rowSelect = (index) => {
+  const row_select = (index) => {
     setModalInfo(userList[index]);
     toogleTrueFalse();
   };
 
   const toogleTrueFalse = () => {
-    setShowModal(handleShow);
+    setShowModal(toggleBtnShow);
   };
-
-  const toggler = () => {
+  const toggle_btn = () => {
     toggle ? setToggle(false) : setToggle(true);
   };
+  const navigate = useNavigate();
+  const [toggle, setToggle] = useState(false);
+  const [modalInfo, setModalInfo] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [show, setShow] = useState(false);
 
+  // ==== handle toggle btn ==== //
+
+  const toggleBtnShow = () => setShow(true);
+  const toggleBtnClose = () => setShow(false);
+  
   const ModalContent = () => {
     return (
       <Modal
@@ -36,7 +37,7 @@ function CardTabelForm(props) {
         aria-labelledby="contained-modal-title-vcenter"
         centered
         show={show}
-        onHide={handleClose}
+        onHide={toggleBtnClose}
         backdrop="static"
       >
         <Modal.Header closeButton>
@@ -73,7 +74,7 @@ function CardTabelForm(props) {
           )}
 
           <hr />
-          <h5>Other Details</h5>
+          <h5>Other</h5>
           <p className="mb-2">
             <i className="fa fa-graduation-cap"></i>
             <span style={{ marginLeft: "10px" }}>{modalInfo.college}</span>
@@ -108,7 +109,7 @@ function CardTabelForm(props) {
     <div>
       {userList.length == 0 ? (
         <h1 className="text-white msg-space p-5">
-          There are no user yet
+          There Aren't Any User Register Yet!
         </h1>
       ) : (
         <div className="form-check form-switch">
@@ -117,8 +118,9 @@ function CardTabelForm(props) {
             type="checkbox"
             role="switch"
             id="flexSwitchCheckChecked"
+            onClick={toggle_btn}
           />
-          <span className="text-white fw-bold">Turn Into Table Layout</span>
+          <span className="text-white fw-bold">switch</span>
         </div>
       )}
       {toggle ? (
@@ -140,7 +142,7 @@ function CardTabelForm(props) {
             <table className="table table-striped table-hover table-light">
               <thead className="">
                 <tr className="text-start">
-                  <th scope="col">#</th>
+                  <th scope="col">No</th>
                   <th scope="col">Name</th>
                   <th scope="col">Date</th>
                   <th scope="col">Gender</th>
@@ -152,7 +154,10 @@ function CardTabelForm(props) {
                 {userList.map((user, index) => {
                   return (
                     <tr
-                      className="row-click text-start"
+                      onClick={() => {
+                        row_select(index);
+                      }}
+                      className="row-click text-start row_pointer"
                       id={index + 1}
                       key={index + 1}
                     >
@@ -169,16 +174,12 @@ function CardTabelForm(props) {
             </table>
           </div>
 
+          {show ? <ModalContent /> : null}
+
           {userList.length != 0 ? (
-            <button
-              type="button"
-              className="clear_btn mt-3"
-              onClick={() => {
-                handleOnClear();
-              }}
-            >
-              Clear Users
-            </button>
+            <div>
+            <button type="button" onClick={()=>{handleOnClear()}} class="btn btn-primary">Clear</button>
+            </div>
           ) : (
             ""
           )}
@@ -189,8 +190,8 @@ function CardTabelForm(props) {
           style={{ width: "100%", marginLeft: "0" }}
         >
           {userList.length != 0 ? (
-            <h3 className="text-center text-white">
-              <u>Card Layout</u>
+            <h3 className="text-center text-black">
+              <u>User Cards</u>
             </h3>
           ) : (
             ""
@@ -204,6 +205,9 @@ function CardTabelForm(props) {
               <div
                 className="card"
                 id={index}
+                onClick={() => {
+                  row_select(index);
+                }}
                 style={{ border: "none" }}
               >
                 <div className="card-body text-start">
@@ -246,22 +250,17 @@ function CardTabelForm(props) {
                   itemSelect(index);
                 }}
               >
-                <span style={style}>Delete Card</span>
+                <i className="fa fa-trash"></i>
+                <span style={style}>Delete</span>
               </h6>
             </div>
           ))}
           {show ? <ModalContent /> : null}
 
           {userList.length != 0 ? (
-            <button
-              type="button"
-              className="clear_btn mt-5"
-              onClick={() => {
-                handleOnClear();
-              }}
-            >
-              Clear
-            </button>
+            <div>
+            <button type="button" onClick={()=>{handleOnClear()}} class="btn btn-primary">Clear</button>
+            </div>
           ) : (
             ""
           )}
@@ -271,4 +270,4 @@ function CardTabelForm(props) {
   );
 }
 
-export default CardTabelForm;
+export default CardsInTable;

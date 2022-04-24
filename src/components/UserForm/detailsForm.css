@@ -1,0 +1,118 @@
+.form_or{
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	min-height: 80vh;
+}
+.form-body {
+	background-color: #94B49F;
+	overflow: hidden;
+}
+
+.form_or .form-content {
+  position: relative;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+.form-content .form-items {
+  border: 3px solid #fff;
+  padding: 40px;
+  display: inline-block;
+  width: 100%;
+  min-width: 700px;
+  border-radius: 10px;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+@media screen and (max-width: 500px) {
+	.form-items {
+		min-width: 0 !important;
+		padding: 20px !important;
+	}
+}
+
+.form-content h3 {
+  color: #fff;
+  text-align: left;
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.form-content h3.form-title {
+  margin-bottom: 30px;
+}
+
+.form-content p {
+  color: #fff;
+  text-align: left;
+  font-size: 17px;
+  font-weight: 300;
+  line-height: 20px;
+  margin-bottom: 30px;
+}
+
+
+.form-content label, .was-validated .form-check-input:invalid~.form-check-label, .was-validated .form-check-input:valid~.form-check-label{
+  color: #fff;
+}
+
+.form-content input[type=text], .form-content input[type=date], .form-content select {
+  width: 100%;
+  padding: 9px 12px;
+  text-align: center;
+  border: 0;
+  outline: 0;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 15px;
+  font-weight: 300;
+  color: #000;
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+  margin-top: 16px;
+  font-weight: bold;
+}
+
+
+.btn-primary{
+  /* background-color: #6C757D; */
+  outline: none;
+  border: 0px;
+   box-shadow: none;
+}
+
+.form-content textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-align: left;
+  background-color: #fff;
+  border: 0;
+  font-size: 15px;
+  margin-bottom: 14px;
+  font-weight: bold;
+}
+
+::placeholder { 
+	color: #000 !important;
+	opacity: 1;
+	font-weight: bold;
+  }
+#reg{
+  text-align: center;
+}
+
+  .form-content {
+    padding: 3.5rem;
+  }
+
+  @media screen and (max-width: 500px) {
+    .form-content {
+      padding: 2rem !important;
+    }
+  }

@@ -1,18 +1,18 @@
 import { React, useEffect, useState } from "react";
-import CardTabelForm from "./cardTableForm/card_table_form";
+import CardTabelForm from "./Form_in_Table/card_table_form";
+import "./userDetails.css";
+// import "."
 
 function UserList(props) {
-  const st = {
-    backgroundColor:'#C69B7B'
-  }
   return (
-    <section id="projects" style={st} >
+    <section style={{ backgroundColor: "#B4CFB0" }}>
       <div className="container">
         <div className="">
           <h1
-            className="text-center text-white text-underline"
-            style={{ padding: "20px 0 12px 0" }}
+            className="text-black text-center"
+            style={{ padding: "" }}
           >
+            <u>{}</u>
           </h1>
 
           <CardTabelForm />
