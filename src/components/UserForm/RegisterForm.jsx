@@ -1,13 +1,12 @@
 import axios from "axios";
 import moment from "moment";
 import { React, useEffect, useState } from "react";
-import "../UserForm/detailsForm.css"
+import "../UserForm/RegisterForm.css"
 import * as services from "../../services/dropdown";
 
-function DetailsForm(props) {
-  const [data_x, setData_x] = useState([]);
-
+function RegisterForm(props) {
   const [name, setname] = useState("");
+  const [sampleData, setsampleData] = useState([]);
   let [date, setdate] = useState("");
   let [address, setaddress] = useState("");
   let [gender, setgender] = useState("");
@@ -24,7 +23,7 @@ function DetailsForm(props) {
   let option = null;
   let country_option = [];
   let country_list = null;
-  // ==== get cuntries === //
+  // ==== get cuntries here === //
   const listCountry = () => {
     axios
       .get("https://restcountries.com/v3.1/all")
@@ -33,24 +32,23 @@ function DetailsForm(props) {
         result.map((res) => {
           country_option.push(res.name.common);
         });
-        setData_x(country_option);
+        setsampleData(country_option);
       })
       .catch((e) => {
         console.log(e);
       });
   };
 
-  if (data_x) {
-    country_list = data_x.map((ele, index) => (
+  if (sampleData) {
+    country_list = sampleData.map((ele, index) => (
       <option key={index} value={ele}>
         {ele}
       </option>
     ));
   }
+// == select colleges based on country == //
 
   useEffect(() => listCountry(), []);
-
-  // For retrieving colleges based on country selected
   const changeSelectOptionHandler = (event) => {
     services
       .getCollegesDropdown(event.target.value, "")
@@ -83,7 +81,8 @@ function DetailsForm(props) {
     }
   };
 
-  // For handling input from "others" checkbox
+  // handllig 'others' hobbies
+
   const handleInput = (event) => {
     const { value } = event.target;
     setExtra(value);
@@ -253,10 +252,7 @@ function DetailsForm(props) {
                         Reading
                       </label>
                     </div>
-
-                    
-
-                    <div className="form-check form-check-inline">
+                     <div className="form-check form-check-inline">
                       <input
                         className="form-check-input"
                         type="checkbox"
@@ -378,4 +374,4 @@ function DetailsForm(props) {
   );
 }
 
-export default DetailsForm;
+export default RegisterForm;

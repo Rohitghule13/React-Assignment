@@ -1,4 +1,4 @@
-import { React, useEffect, useState } from "react";
+import React from "react";
 import CardTabelForm from "./Form_in_Table/card_table_form";
 import "./userDetails.css";
 // import "."

@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Navigate, Routes } from "react-router-dom";
 
-import DetailsForm from "./components/UserForm/detailsForm"
+import RegisterForm from "./components/UserForm/RegisterForm"
 import UserList from "./components/UserList/userDetails";
 import CollegeList from "./components/College/collegeSearch";
 import Header from "./components/Header/Header";
@@ -16,7 +16,7 @@ function App() {
           <Route
             path="/"
             element={
-              <DetailsForm title="Registration" overlap_title="User Details" />
+              <RegisterForm title="Registration" overlap_title="User Details" />
             }
           />
           <Route path="userlist" element={<UserList/>} />
